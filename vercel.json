@@ -1,7 +1,4 @@
 {
-  "functions": {
-    "api/generate-doc.py": {
-      "runtime": "@vercel/python@3.0.7"
-    }
-  }
+  "buildCommand": "next build",
+  "outputDirectory": ".next"
 }
