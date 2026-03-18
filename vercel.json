@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/generate-doc.py": {
+      "runtime": "python3.9"
+    }
+  }
+}
