@@ -83,6 +83,12 @@ class handler(BaseHTTPRequestHandler):
         def is_action_line(l):
             return '\u2192' in l or ('->' in l and re.match(r'^[A-Z]', l.strip()))
 
+        def is_person_name(l):
+            # Standalone person name: 2–4 title-case words, short line, no digits/punctuation
+            # e.g. "Aaron Cutler", "Juan Anderson", "Mary Jo Smith"
+            t = l.strip()
+            return bool(re.match(r'^[A-Z][A-Za-z\-]+(?: [A-Z][A-Za-z\-]+){1,3}$', t)) and len(t) < 50
+
         def flush_row():
             if not current_num:
                 return
@@ -111,6 +117,9 @@ class handler(BaseHTTPRequestHandler):
                         current_item.append(match.group(2))
             elif is_notes_line(t) or is_action_line(t):
                 current_notes.append(t)
+            elif current_num and not current_notes and is_person_name(t):
+                # Standalone person name appearing before Notes: goes in the Action column
+                current_action = t
             elif current_num:
                 if not current_notes:
                     current_item.append(t)
